@@ -87,7 +87,6 @@ jobs:
 
       - name: Build
         run: |
-          pip3 show polib
           python3 -m venv ./venv
           source ./venv/bin/activate
           pip3 show polib
