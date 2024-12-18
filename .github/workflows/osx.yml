@@ -83,12 +83,11 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE=yes HOMEBREW_NO_INSTALL_CLEANUP=yes brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gettext ccache parallel clang-format astyle
           python3 -m venv ./venv
           source ./venv/bin/activate
-          pip3 install mac_alias==2.2.0 dmgbuild==1.6.1 biplist polib
+          pip3 install mac_alias==2.2.0 dmgbuild==1.6.1 biplist polib luaparser
 
       - name: Build
         run: |
           python3 -m venv ./venv
           source ./venv/bin/activate
-          pip3 show polib
           make -j3 TILES=${{ matrix.tiles }} SOUND=${{ matrix.tiles }} LUA=1 RELEASE=1 LANGUAGES=all USE_HOME_DIR=1 OSX_MIN=11 PCH=0 dmgdist COMPILER=$(brew --prefix llvm)/bin/clang
           mv CataclysmBN-${{ env.VERSION }}.dmg cbn-${{ matrix.artifact }}-${{ env.VERSION }}.dmg
