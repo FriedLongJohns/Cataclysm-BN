@@ -84,7 +84,8 @@ jobs:
           python3 -m venv ./venv
       - name: Where venv??
         run: |
-          if [ ! -d "./venv" ]; then
+          if [ ! -d "./venv" ]
+          then
             echo "Cant find venv"
             find . -name "*venv*"
             exit 1
