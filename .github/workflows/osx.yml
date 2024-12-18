@@ -82,8 +82,18 @@ jobs:
         run: |
           HOMEBREW_NO_AUTO_UPDATE=yes HOMEBREW_NO_INSTALL_CLEANUP=yes brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gettext ccache parallel clang-format astyle
           python3 -m venv ./venv
+      - name: Where venv??
+        run: |
+          if [ ! -d "./venv" ]; then
+            echo "Cant find venv"
+            find . -name "*venv*"
+            exit 1
+          fi
+      - name: Finish build deps
           source ./venv/bin/activate
           pip3 install mac_alias==2.2.0 dmgbuild==1.6.1 biplist polib
+
+      
 
       - name: Build
         working-directory: ./android
