@@ -61,13 +61,24 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
+    env:
+      ZSTD_CLEVEL: 17
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-
-      - name: Setup build and dependencies
+        
+      - name: Install runtime dependencies (mac)
+        if: runner.os == 'macOS'
+        uses: BrettDong/setup-sdl2-frameworks@v1
+        with:
+          sdl2: latest
+          sdl2-ttf: latest
+          sdl2-image: latest
+          sdl2-mixer: latest
+        
+      - name: Install build dependencies
         run: |
           HOMEBREW_NO_AUTO_UPDATE=yes HOMEBREW_NO_INSTALL_CLEANUP=yes brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gettext ccache parallel clang-format astyle
           python3 -m venv ./venv
