@@ -87,5 +87,9 @@ jobs:
 
       - name: Build
         run: |
+          pip3 show polib
+          python3 -m venv ./venv
+          source ./venv/bin/activate
+          pip3 show polib
           make -j3 TILES=${{ matrix.tiles }} SOUND=${{ matrix.tiles }} LUA=1 RELEASE=1 LANGUAGES=all USE_HOME_DIR=1 OSX_MIN=11 PCH=0 dmgdist COMPILER=$(brew --prefix llvm)/bin/clang
           mv CataclysmBN-${{ env.VERSION }}.dmg cbn-${{ matrix.artifact }}-${{ env.VERSION }}.dmg
