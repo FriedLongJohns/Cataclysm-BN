@@ -18,9 +18,9 @@ on:
       - 'scripts/**'
 
 # We only care about the latest revision of a PR, so cancel previous instances.
-# concurrency:
-  # group: android-build-${{ github.event.pull_request.number || github.ref_name }}
-  # cancel-in-progress: true
+concurrency:
+  group: osx-build-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   build_catatclysm:
@@ -63,14 +63,14 @@ jobs:
 
     env:
       ZSTD_CLEVEL: 17
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
         
-      - name: Install runtime dependencies (mac)
-        if: runner.os == 'macOS'
+      - name: Install runtime dependencies
         uses: BrettDong/setup-sdl2-frameworks@v1
         with:
           sdl2: latest
@@ -82,24 +82,10 @@ jobs:
         run: |
           HOMEBREW_NO_AUTO_UPDATE=yes HOMEBREW_NO_INSTALL_CLEANUP=yes brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gettext ccache parallel clang-format astyle
           python3 -m venv ./venv
-      - name: Where venv??
-        run: |
-          if [ ! -d "./venv" ]
-          then
-            echo "Cant find venv"
-            find . -name "*venv*"
-            exit 1
-          fi
-      - name: Finish build deps
-        run: |
           source ./venv/bin/activate
           pip3 install mac_alias==2.2.0 dmgbuild==1.6.1 biplist polib
 
-      
-
       - name: Build
-        working-directory: ./android
         run: |
-          source ./venv/bin/activate
           make -j3 TILES=${{ matrix.tiles }} SOUND=${{ matrix.tiles }} LUA=1 RELEASE=1 LANGUAGES=all USE_HOME_DIR=1 OSX_MIN=11 PCH=0 dmgdist COMPILER=$(brew --prefix llvm)/bin/clang
           mv CataclysmBN-${{ env.VERSION }}.dmg cbn-${{ matrix.artifact }}-${{ env.VERSION }}.dmg
