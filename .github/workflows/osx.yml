@@ -85,6 +85,11 @@ jobs:
           source ./venv/bin/activate
           pip3 install mac_alias==2.2.0 dmgbuild==1.6.1 biplist polib luaparser
 
+      - name: Check Clang OK
+        run: |
+          echo "Clang++ version:"
+          $(brew --prefix llvm)/bin/clang++ --version  # Ensure clang++ is installed and working
+
       - name: Build
         run: |
           source ./venv/bin/activate
