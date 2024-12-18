@@ -90,6 +90,7 @@ jobs:
             exit 1
           fi
       - name: Finish build deps
+        run: |
           source ./venv/bin/activate
           pip3 install mac_alias==2.2.0 dmgbuild==1.6.1 biplist polib
 
